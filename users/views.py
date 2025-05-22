@@ -10,7 +10,7 @@ def register(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user, backend='django.contrib.backends.ModelBackend')
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect('users:profile')
     else:
         form = CustomUserCreationForm()
@@ -22,7 +22,7 @@ def login_view(request):
         form = CustomUserLoginForm(request=request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
-            login(request, user, backend='django.contrib.backends.ModelBackend')
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect('users:profile')
     else:
         form = CustomUserLoginForm()
@@ -44,22 +44,22 @@ def account_details(request):
 @login_required
 def edit_account_details(request):
     form = CustomUserUpdateForm(instance=request.user)
-    return render(request, 'users/partials/account_details.html',
+    return render(request, 'users/partials/edit_account_details.html', 
                   {'user': request.user, 'form': form})
 
 
 @login_required
 def update_account_details(request):
     if request.method == 'POST':
-        form = CustomUserUpdateForm(instance=request.user)
+        form = CustomUserUpdateForm(request.POST, instance=request.user)
         if form.is_valid():
             user = form.save(commit=False)
-            user.clean()
+            user.clean()  
             user.save()
             return render(request, 'users/partials/account_details.html', {'user': user})
         else:
-             return render(request, 'users/partials/account_details.html', {'user': user})
-    return render(request, 'users/partials/account_details.html', {'user': user})
+            return render(request, 'users/partials/edit_account_details.html', {'user': request.user, 'form': form})
+    return render(request, 'users/partials/account_details.html', {'user': request.user})
      
        
 def logout_view(request):
