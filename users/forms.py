@@ -16,11 +16,11 @@ class CustomUserCreationForm(UserCreationForm):
                                  widget=forms.EmailInput(attrs={'class': 'input-register form-control', 'placeholder': 'Your last name'}))
     password1 = forms.CharField(
         required=True,
-        widget=forms.EmailInput(attrs={'class': 'input-register form-control', 'placeholder': 'Your password'})
+        widget=forms.PasswordInput(attrs={'class': 'input-register form-control', 'placeholder': 'Your password'})
     )
     password2 = forms.CharField(
         required=True,
-        widget=forms.EmailInput(attrs={'class': 'input-register form-control', 'placeholder': 'Confirm your password'})
+        widget=forms.PasswordInput(attrs={'class': 'input-register form-control', 'placeholder': 'Confirm your password'})
     )
     marketing_consent1 = forms.BooleanField(required=False, 
                                             label="I agree to receive commercial, promotional, and marketing communications.",
@@ -58,7 +58,7 @@ class CustomUserLoginForm(AuthenticationForm):
                                widget=forms.TextInput(attrs={'autofocus': True, 'class': 'input-register form-control', 'placeholder': 'Your email'}))
     password = forms.CharField(
         label='Password',
-        widget=forms.TextInput(attrs={'autofocus': True, 'class': 'input-register form-control', 'placeholder': 'Your Password'})
+        widget=forms.PasswordInput(attrs={'autofocus': True, 'class': 'input-register form-control', 'placeholder': 'Your Password'})
     )
 
 
@@ -135,9 +135,9 @@ class CustomUserUpdateForm(forms.ModelForm):
         if not cleaned_data.get('email'):
             cleaned_data['email'] = self.instance.email
 
-            for field in ['address1', 'address2', 'city', 'country', 'province',
-                          'postal_code', 'phone']:
-                if cleaned_data.get(field):
-                    cleaned_data[field] = strip_tags(cleaned_data[field])
+        for field in ['address1', 'address2', 'city', 'country', 'province',
+                        'postal_code', 'phone']:
+            if cleaned_data.get(field):
+                cleaned_data[field] = strip_tags(cleaned_data[field])
 
-                return cleaned_data
+        return cleaned_data
